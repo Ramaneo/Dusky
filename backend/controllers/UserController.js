@@ -1,17 +1,33 @@
-const crypto = require('crypto');
+const bcrypt = require('bcrypt');
+const User = require('../models/UserModel');
+const saltRounds = 10;
 
-function hashPassword(password, salt) {
-  return crypto.pbkdf2Sync(password, salt, 
-      1000, 64, `sha512`).toString(`hex`); 
+// function here is very basic and removes anything that's not a letter, number, @, or .
+function sanitizeInput(input) {
+  return input.replace(/[^a-zA-Z0-9@.]/g, '');
 }
 
-exports.register = (req,res) => {
-  const salt = crypto.randomBytes(16).toString('hex');
-  const hash = hashPassword(req.body.password, salt);
-  const username = req.body.username;
-  const email = req.body.email;
-  // FIX: Register the username,email,hash,salt to the DB
-  res.send("Register Succesful.")
+exports.register = async (req,res) => {
+  try {
+    const sanitizedUsername = sanitizeInput(req.body.username);
+    const sanitizedEmail = sanitizeInput(req.body.email);
+    const sanitizedPassword = sanitizeInput(req.body.password);
+    const salt = await bcrypt.genSalt(saltRounds);
+    const hashedPassword = await bcrypt.hash(sanitizedPassword, salt);
+    const user = new User({
+      username: sanitizedUsername,
+      email: sanitizedEmail,
+      password: hashedPassword,
+      salt,
+    });
+    const savedUser = await user.save();
+    console.log("User Registered: ", savedUser);
+    res.send("Register Succesful.")
+  }
+  catch(error) {
+    console.log(error)
+    res.send("Register Failed.")
+  }
 }
 
 exports.login = (req, res) => {
