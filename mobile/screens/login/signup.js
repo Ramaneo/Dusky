@@ -17,7 +17,7 @@ export default Signup = ({ navigation }) => {
 
   const handleSignup = () => {
     if (password == repeatedPassword)
-      fetch(baseURL + "/auth/register", {
+      fetch(baseURL + "/user/register", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -31,7 +31,7 @@ export default Signup = ({ navigation }) => {
       })
         .then((res) => {
           if (res.status == 200) {
-            return res.json();
+            return res;
           } else {
             throw new Error(`HTTP status ${res.status}`);
           }
@@ -40,7 +40,7 @@ export default Signup = ({ navigation }) => {
           navigation.goBack();
         })
         .catch((error) => {
-          console.error("Login failed:", error.message);
+          console.error("Reg failed:", error.message);
         });
   };
 
