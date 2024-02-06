@@ -1,7 +1,6 @@
 const express = require('express');
 const app = express();
 const UserRoutes = require('./routes/UserRoutes');
-const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
 const dbConnection = require('./database-connection');
 const port = 3000;
@@ -9,7 +8,6 @@ const port = 3000;
 app.use(cookieParser());
 app.use(express.json());
 app.use('/user', UserRoutes);
-const JWT_SECRET = 'TBD'; 
 dbConnection.run().catch(console.error);
 
 
