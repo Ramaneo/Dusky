@@ -114,7 +114,10 @@ export default Authenticate = ({ navigation }) => {
               marginTop: 10,
             }}
             onPress={() => {
-              navigation.navigate("Email");
+              navigation.navigate("Email", {
+                type:
+                  loginType == 0 ? "user" : loginType == 1 ? "worker" : "owner",
+              });
             }}
           >
             <View

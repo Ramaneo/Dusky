@@ -9,7 +9,9 @@ import {
 } from "react-native";
 import { baseURL } from "../../config/axios";
 
-export default Signup = ({ navigation }) => {
+export default Signup = ({ navigation, route }) => {
+  const { type } = route.params;
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -27,6 +29,7 @@ export default Signup = ({ navigation }) => {
           username,
           password,
           email,
+          user_type: type,
         }),
       })
         .then((res) => {

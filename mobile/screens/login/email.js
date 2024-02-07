@@ -10,7 +10,9 @@ import {
 import { baseURL } from "./../../config/axios";
 import { saveToken } from "../../helpers/Utils";
 
-export default Email = ({ navigation }) => {
+export default Email = ({ navigation, route }) => {
+  const { type } = route.params;
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -154,7 +156,7 @@ export default Email = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={{ marginTop: 10 }}
-            onPress={() => navigation.navigate("Signup")}
+            onPress={() => navigation.navigate("Signup", { type })}
           >
             <Text style={{ fontSize: 12, color: "#7e7e7e" }}>
               {"Don't have an account? "}
