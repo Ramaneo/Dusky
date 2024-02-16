@@ -17,7 +17,7 @@ export default Email = ({ navigation, route }) => {
   const [password, setPassword] = useState("");
 
   const loginClicked = () => {
-    fetch(baseURL + "/auth/login", {
+    fetch(baseURL + "/user/login", {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -28,17 +28,13 @@ export default Email = ({ navigation, route }) => {
         password,
       }),
     })
+      .then((res) => res.text())
       .then((res) => {
-        if (res.status == 200) {
-          return res.json();
+        if (res == "Login Successful.") {
+          return navigation.navigate("Home");
         } else {
           throw new Error(`HTTP status ${res.status}`);
         }
-      })
-      .then((res) => {
-        saveToken(res.token, res.userId.toString()).then(() => {
-          navigation.navigate("Home");
-        });
       })
       .catch((error) => {
         console.error("Login failed:", error.message);
