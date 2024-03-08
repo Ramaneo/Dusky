@@ -3,6 +3,7 @@ const app = express();
 const UserRoutes = require('./routes/UserRoutes');
 const cookieParser = require('cookie-parser');
 const dbConnection = require('./database-connection');
+const accessControl = require('./AccessControlManager')
 const port = 3000;
 
 app.use(cookieParser());

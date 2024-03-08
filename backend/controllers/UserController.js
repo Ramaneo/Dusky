@@ -4,8 +4,6 @@ const jwt = require('jsonwebtoken');
 const JWT_SECRET = '0315926927202137F13A3BBC32C7801CD2C98BF9BFF8A288307B5C60EE570257'; 
 const saltRounds = 10;
 
-// function here is very basic and removes anything that's not a letter, number, @, or .
-
 exports.register = async (req,res) => {
   try {
     const userName = req.body.username;
