@@ -36,7 +36,7 @@ export default Home = () => {
       <Tab.Screen
         name="Main"
         component={Main}
-        // options={{ headerShown: false }}
+        options={{ headerShown: false }}
         initialParams={{
           Icon: HomeIcon,
         }}
