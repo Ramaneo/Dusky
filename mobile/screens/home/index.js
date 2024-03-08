@@ -10,14 +10,63 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { BlurView } from "@react-native-community/blur";
+import Profile from "./profile";
+import Main from "./main";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import Activity from "./activity";
+import Offers from "./offers";
+import { SvgUri, SvgXml } from "react-native-svg";
+import HomeIcon from "./../../assets/icons/home.svg";
+import WalletIcon from "./../../assets/icons/wallet.svg";
+import ActivityIcon from "./../../assets/icons/activity.svg";
+import ProfileIcon from "./../../assets/icons/profile.svg";
 
 const Tab = createBottomTabNavigator();
 
 export default Home = () => {
   const Stack = createNativeStackNavigator();
 
-  return <></>;
+  return (
+    <Tab.Navigator
+      initialRouteName="Profile"
+      backBehavior="none"
+      tabBar={(props) => <MyTabBar {...props} />}
+    >
+      <Tab.Screen
+        name="Main"
+        component={Main}
+        // options={{ headerShown: false }}
+        initialParams={{
+          Icon: HomeIcon,
+        }}
+      />
+      <Tab.Screen
+        name="Offers"
+        component={Offers}
+        options={{ headerShown: false }}
+        initialParams={{
+          Icon: WalletIcon,
+        }}
+      />
+      <Tab.Screen
+        name="Activity"
+        component={Activity}
+        options={{ headerShown: false }}
+        initialParams={{
+          Icon: ActivityIcon,
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        options={{ headerShown: false }}
+        component={Profile}
+        initialParams={{
+          Icon: ProfileIcon,
+        }}
+      />
+    </Tab.Navigator>
+  );
 };
 
 function MyTabBar({ state, descriptors, navigation }) {
@@ -37,13 +86,13 @@ function MyTabBar({ state, descriptors, navigation }) {
       blurAmount={40}
       style={{
         position: "absolute",
-        height: 80,
+        height: 90,
         bottom: 0,
         right: 0,
         left: 0,
 
         flexDirection: "row",
-        paddingTop: 20,
+        paddingTop: 30,
         borderTopWidth: 1,
         borderTopColor: "#e7e8cc",
       }}
@@ -77,6 +126,7 @@ function MyTabBar({ state, descriptors, navigation }) {
             target: route.key,
           });
         };
+        const IconComponent = route.params.Icon;
 
         return (
           <TouchableOpacity
@@ -89,14 +139,26 @@ function MyTabBar({ state, descriptors, navigation }) {
             onLongPress={onLongPress}
             style={{ flex: 1, alignItems: "center" }}
           >
-            <Image
+            {/* <Image
               style={{
                 height: 25,
                 width: 25,
                 tintColor: isFocused ? "black" : "#7e7e7e",
               }}
               source={route.params.icon}
+            /> */}
+            {/* <SvgXml
+              width="25"
+              height="25"
+              fill={isFocused ? "black" : "#7e7e7e"}
+              xml={route.params.icon}
+            /> */}
+            <IconComponent
+              height={25}
+              width={25}
+              color={isFocused ? "black" : "#7e7e7e"}
             />
+
             {/* <Text style={{color: isFocused ? '#673ab7' : '#222'}}>
                 {label}
               </Text> */}
