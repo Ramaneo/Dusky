@@ -1,14 +1,16 @@
 const express = require('express');
 const app = express();
 const UserRoutes = require('./routes/UserRoutes');
+const FeedbackRoutes = requier('./routes/FeedbackRoutes');
 const cookieParser = require('cookie-parser');
 const dbConnection = require('./database-connection');
-const accessControl = require('./AccessControlManager')
+const accessControl = require('./AccessControlManager');
 const port = 3000;
 
 app.use(cookieParser());
 app.use(express.json());
 app.use('/user', UserRoutes);
+app.use('/feedback', FeedbackRoutes)
 dbConnection.run().catch(console.error);
 
 
