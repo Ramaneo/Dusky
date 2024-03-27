@@ -3,10 +3,10 @@ const Feedback = require("../models/FeedbackModel");
 exports.submitFeedback = async (req,res) => {
     try {
         const feedback = new Feedback({
-          user: req.user,
-          business: req.business,
-          feedbackContent: req.feedbackContent,
-          score: req.score
+          user: req.body.user,
+          business: req.body.business,
+          feedbackContent: req.body.feedbackContent,
+          score: req.body.score
         });
         const savedFeedback = await feedback.save();
         console.log("Feedback Registered: ", savedFeedback);
@@ -20,7 +20,7 @@ exports.submitFeedback = async (req,res) => {
 
 exports.reviewFeedback = async (req,res) => {
     try {
-        const feedbackList = await Feedback.find({user: req.user});
+        const feedbackList = await Feedback.find({user: req.body.user});
         res.send(feedbackList);
     }
     catch(error) {
@@ -31,7 +31,7 @@ exports.reviewFeedback = async (req,res) => {
 
 exports.analyzeFeedback = async (req,res) => {
     try {
-        const feedbackList = await Feedback.find({business: req.business});
+        const feedbackList = await Feedback.find({business: req.body.business});
         res.send(feedbackList);
     }
     catch(error) {

@@ -1,4 +1,4 @@
-const User = require('../models/UserModel');
+const User = require('./models/UserModel');
 
 //  For any get function, it will return 0 if failed.
 //  For any modify function, it will return 1 if succesfull.
