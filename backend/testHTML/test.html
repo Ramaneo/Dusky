@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kullanıcı ve Restoran İşlemleri</title>
+</head>
+<body>
+
+<h2>Kullanıcı Takipçi Sayısı Güncelleme ve İndirim Kodu Oluşturma</h2>
+<form id="userForm">
+  <label for="userId">Kullanıcı ID:</label><br>
+  <input type="text" id="userId" name="userId"><br>
+  <label for="followers">Takipçi Sayısı:</label><br>
+  <input type="number" id="followers" name="followers"><br><br>
+  <input type="button" value="Takipçi Sayısını Güncelle ve İndirim Kodu Oluştur" onclick="updateFollowers()">
+</form> 
+
+<h2>Restoran İndirim Kodu Doğrulama</h2>
+<form id="restaurantForm">
+  <label for="discountCode">İndirim Kodu:</label><br>
+  <input type="text" id="discountCode" name="discountCode"><br><br>
+  <input type="button" value="İndirim Kodunu Doğrula" onclick="verifyDiscountCode()">
+</form> 
+
+<script>
+// Kullanıcı takipçi sayısı güncelleme ve indirim kodu oluşturma
+function updateFollowers() {
+  const userId = document.getElementById('userId').value;
+  const followers = document.getElementById('followers').value;
+
+  fetch('/user/update-followers', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ userId, followers }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Success:', data);
+    alert("İndirim kodu başarıyla oluşturuldu ve takipçi sayısı güncellendi.");
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+    alert("Bir hata oluştu.");
+  });
+}
+
+// Restoran indirim kodu doğrulama
+function verifyDiscountCode() {
+  const code = document.getElementById('discountCode').value;
+
+  fetch('/store/verify-discount-code', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ code }),
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Success:', data);
+    alert(`İndirim yüzdesi: ${data.discountPercent}%`);
+  })
+  .catch((error) => {
+    console.error('Error:', error);
+    alert("Bir hata oluştu veya indirim kodu geçersiz.");
+  });
+}
+</script>
+
+</body>
+</html>

@@ -61,3 +61,21 @@ exports.getSubscribedStores = async (req, res) => {
     })
   }
 };
+
+
+const DiscountCode = require('../models/DiscountCodeModel');
+
+exports.verifyDiscountCode = async (req, res) => {
+  const { code } = req.body;
+
+  try {
+    const discountCode = await DiscountCode.findOne({ code }).populate('user');
+    if (!discountCode) {
+      return res.status(404).send('Discount code not found.');
+    }
+    res.json({ message: 'Discount code verified successfully', discountPercent: discountCode.discountPercent });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error verifying discount code');
+  }
+};
