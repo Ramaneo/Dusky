@@ -1,5 +1,6 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/UserModel');
+const DiscountCode = require('../models/DiscountCodeModel');
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = '0315926927202137F13A3BBC32C7801CD2C98BF9BFF8A288307B5C60EE570257'; 
 const saltRounds = 10;
@@ -62,10 +63,6 @@ exports.getUsers = async (req, res) => {
     }
 };
 
-
-
-const DiscountCode = require('../models/DiscountCodeModel');
-
 exports.generateDiscountCode = async (req, res) => {
   const user = req.body.user; // Kullanıcı ID'si
   const discountPercent = Math.min(req.body.followers * 0.1, 50); //max %50 DİSCOUNT
@@ -120,3 +117,19 @@ exports.updateFollowers = async (req, res) => {
     res.status(500).send('Error updating followers or generating discount code');
   }
 };
+
+exports.followUser = async (req, res) => {
+
+}
+
+exports.unfollowUser = async (req, res) => {
+  
+}
+
+exports.subscribeStore = async (req, res) => {
+
+}
+
+exports.unsubscribeStore = async (req, res) => {
+  
+}
