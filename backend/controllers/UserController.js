@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/UserModel');
 const DiscountCode = require('../models/DiscountCodeModel');
+const Store = require('../models/StoreModel')
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = '0315926927202137F13A3BBC32C7801CD2C98BF9BFF8A288307B5C60EE570257'; 
 const saltRounds = 10;
@@ -119,17 +120,65 @@ exports.updateFollowers = async (req, res) => {
 };
 
 exports.followUser = async (req, res) => {
-
+  const followerUserID = req.body.follower_user_id; //Id of the person following
+  const followingUserID = req.body.following_user_id;
+  const followerUser = User.findById(followerUserID);
+  const updateFollowersList = { $push: { followers_list: followingUserID},$inc: { followers: 1 } };
+  const updateFollowingList = { $push: { following_list: followerUserID} };
+  if ((followerUser.followers_list).includes(followingUserID)) {
+    res.send("Error, you are already following this user.")
+  }
+  else {
+    User.findByIdAndUpdate(followerUserID, updateFollowersList);
+    User.findByIdAndUpdate(followingUserID, updateFollowingList);
+    res.send("Followed successfully.")
+  }
 }
 
 exports.unfollowUser = async (req, res) => {
-  
+  const followerUserID = req.body.follower_user_id; //Id of the person following
+  const followingUserID = req.body.following_user_id;
+  const followerUser = User.findById(followerUserID);
+  const updateFollowersList = { $pull: { followers_list: followingUserID},$inc: { followers: -1 } };
+  const updateFollowingList = { $pull: { following_list: followerUserID} };
+  if ((followerUser.followers_list).includes(followingUserID)) {
+    User.findByIdAndUpdate(followerUserID, updateFollowersList);
+    User.findByIdAndUpdate(followingUserID, updateFollowingList);
+    res.send("Unfollowed succesfully.")
+  }
+  else {
+    res.send("Error, you are not following following this user.")
+  }
 }
 
 exports.subscribeStore = async (req, res) => {
-
+  const storeID = req.body.store_id;
+  const userID = req.body.user_id;
+  const updateUser = {$push: {subscribed_stores_list: storeID}};
+  const updateStore = { $inc: {sub_count: 1}};
+  const user = User.findById(userID);
+  if ((user.subscribed_stores_list).includes(storeID)) {
+    res.send("Error, you are already subscribed to this store.")
+  }
+  else {
+    User.findByIdAndUpdate(userID, updateUser);
+    Store.findByIdAndDelete(storeID, updateStore);
+    res.send("Subscribed succesfully.")
+  }
 }
 
 exports.unsubscribeStore = async (req, res) => {
-  
+  const storeID = req.body.store_id;
+  const userID = req.body.user_id;
+  const updateUser = {$pull: {subscribed_stores_list: storeID}};
+  const updateStore = { $inc: {sub_count: -1}};
+  const user = User.findById(userID);
+  if((user.subscribed_stores_list).includes(storeID)) {
+    User.findByIdAndUpdate(userID, updateUser);
+    Store.findByIdAndDelete(storeID, updateStore);
+    res.send("Unsubscribed succesfully.")
+  }
+  else {
+    res.send("Error, you are not subscribed to this store.")
+  }
 }
